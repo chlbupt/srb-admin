@@ -13,14 +13,22 @@
       ></el-table-column>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
+          <router-link
+            :to="'/core/integral-grade/edit/' + scope.row.id"
+            style="margin-right:5px;"
+          >
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-edit"
+            ></el-button>
+          </router-link>
           <el-button
             type="danger"
             size="mini"
             icon="el-icon-delete"
             @click="removeById(scope.row.id)"
-          >
-            删除
-          </el-button>
+          ></el-button>
         </template>
       </el-table-column>
     </el-table>
