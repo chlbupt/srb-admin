@@ -10,5 +10,8 @@ export default {
   },
   show(id) {
     return request.get(`/admin/core/borrower/show/${id}`)
+  },
+  approval(borrowerApproval) {
+    return request.post(`/admin/core/borrower/approval`, borrowerApproval)
   }
 }

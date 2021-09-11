@@ -141,6 +141,65 @@
         </el-button>
       </el-row>
     </el-form>
+    <!-- 审批表单 -->
+    <el-form v-if="borrower.status == '认证中'" label-width="170px">
+      <el-form-item label="是否通过">
+        <el-radio-group v-model="approvalForm.status">
+          <el-radio :label="2">
+            通过
+          </el-radio>
+          <el-radio :label="1">
+            不通过
+          </el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="基本信息积分" v-if="approvalForm.status == 2">
+        <el-input
+          v-model="approvalForm.infoIntegral"
+          style="width:140px"
+        ></el-input>
+        <span style="color:indianred">(可获取30至100积分)</span>
+      </el-form-item>
+
+      <el-form-item v-if="approvalForm.status == 2" label="身份证信息是否正确">
+        <el-radio-group v-model="approvalForm.isIdCardOk">
+          <el-radio :label="true">
+            是
+          </el-radio>
+          <el-radio :label="false">
+            否
+          </el-radio>
+        </el-radio-group>
+        <span style="color: indianred">（可获得积分30积分）</span>
+      </el-form-item>
+
+      <el-form-item v-if="approvalForm.status == 2" label="车辆信息是否正确">
+        <el-radio-group v-model="approvalForm.isCarOk">
+          <el-radio :label="true">
+            是
+          </el-radio>
+          <el-radio :label="false">
+            否
+          </el-radio>
+        </el-radio-group>
+        <span style="color: indianred">（可获得积分60积分）</span>
+      </el-form-item>
+
+      <el-form-item v-if="approvalForm.status == 2" label="房产信息是否正确">
+        <el-radio-group v-model="approvalForm.isHouseOk">
+          <el-radio :label="true">
+            是
+          </el-radio>
+          <el-radio :label="false">
+            否
+          </el-radio>
+        </el-radio-group>
+        <span style="color: indianred">（可获得积分100积分）</span>
+      </el-form-item>
+      <el-row style="text-align:center">
+        <el-button type="primary" @click="approvalSubmit()">确定</el-button>
+      </el-row>
+    </el-form>
   </div>
 </template>
 
@@ -174,6 +233,13 @@ export default {
       this.borrower = response.data.borrowerDetailVO
     },
     back() {
+      this.$router.push('/core/borrower/list')
+    },
+    async approvalSubmit() {
+      this.saveBtnDisabled = true
+      this.approvalForm.borrowerId = this.$route.params.id
+      const response = await borrowerApi.approval(this.approvalForm)
+      this.$message.success(response.message)
       this.$router.push('/core/borrower/list')
     }
   }
